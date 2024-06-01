@@ -1,0 +1,350 @@
+---
+- name: Post Stow Configuration
+  hosts: localhost
+  vars:
+    github_username: "suyashbhawsar"
+  tasks:
+
+    - name: "MacOS | Install 1Password and 1Password CLI"
+      homebrew:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - 1password
+        - 1password-cli
+      tags:
+        - mac-full
+
+# ###gcloud
+    - name: Include vars file from the cloned repo
+      include_vars:
+        file: "{{ ansible_user_dir }}/.dotfiles/gcloud/gcloud_credentials.yml"
+      tags:
+        - mac-minimal
+        - mac-full
+        - linux
+
+    - name: "MacOS | Install Google Cloud SDK"
+      homebrew:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - 1password
+        - 1password-cli
+      tags:
+        - mac-full
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - gnupg
+          - curl
+        state: present
+      tags:
+        - linux
+
+    - name: Add Google Cloud public GPG key
+      shell: curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+      become: true
+      tags:
+        - linux
+
+
+    - name: Add Google Cloud SDK repository
+      copy:
+        content: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main\n"
+        dest: /etc/apt/sources.list.d/google-cloud-sdk.list
+        owner: root
+        group: root
+        mode: '0644'
+      tags:
+        - linux
+
+    - name: Update apt package list
+      apt:
+        update_cache: yes
+      tags:
+        - linux
+
+    - name: "Linux | Install Google Cloud SDK"
+      apt:
+        name: google-cloud-cli
+        state: present
+      tags:
+        - linux
+
+    - name: Ensure .gcp_keys directory exists
+      file:
+        path: "{{ ansible_user_dir }}/.gcp_keys"
+        state: directory
+        mode: '0700'
+      become: false
+      tags:
+        - mac-full
+        - linux
+
+    - name: Copy service-account-key-file to .gcp_keys directory
+      copy:
+        src: "~/.dotfiles/gcloud/service-account.json"
+        dest: "~/.gcp_keys/service-account.json"
+        mode: '0600'
+      become: false
+      tags:
+        - mac-full
+        - linux
+
+
+    - name: Authenticate with service account
+      command: gcloud auth activate-service-account --key-file "~/.gcp_keys/service-account.json"
+      become: false
+      tags:
+        - mac-full
+        - linux
+
+
+## kitty
+    - name: "MacOS | Install Kitty emulator"
+      homebrew:
+        name: kitty
+        state: present
+      tags:
+        - mac-full
+
+
+## neovim
+    - name: "MacOS | Install Neovim & its Dependencies"
+      homebrew:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - libtool
+        - ansible-lint
+        - ripgrep
+        - lua
+        - luarocks
+        - luajit
+        - neovim
+      tags:
+        - mac-minimal
+        - mac-full
+
+    - name: "Debian | Install Neovim & its Dependencies"
+      ansible.builtin.apt:
+        name:
+          - cmake
+          - curl
+          - pkg-config
+          - libtool
+          - unzip
+          - ansible-lint
+          - ripgrep
+          - lua5.1
+          - luarocks
+          - luajit
+          - neovim
+        state: present
+      become: true
+      tags:
+        - linux
+
+    - name: "Neovim | Config folder"
+      ansible.builtin.file:
+        mode: "0755"
+        path: "{{ ansible_user_dir }}/.config/nvim"
+        state: directory
+      tags:
+        - mac-minimal
+        - mac-full
+        - linux
+
+
+##obsidian
+    - name: "MacOS | Install Obsidian"
+      homebrew:
+        name: obsidian
+        state: present
+      tags:
+        - mac-minimal
+        - mac-full
+
+
+## tmux
+    - name: "MacOS | Install tmux"
+      homebrew:
+        name: tmux
+        state: present
+      tags:
+        - mac-minimal
+        - mac-full
+
+    - name: "Debian | Install tmux"
+      ansible.builtin.apt:
+        name: tmux
+        state: present
+      become: true
+      tags:
+        - linux
+
+    - name: "Tmux | Configure tmux using Stow"
+      ansible.builtin.command:
+        cmd: "stow -d {{ ansible_user_dir }}/.dotfiles -t {{ ansible_env.HOME }} tmux"
+      tags:
+        - mac-minimal
+        - mac-full
+        - linux
+
+#    - name: "Tmux | Configure tmux"
+#      ansible.builtin.copy:
+#        src: "{{ ansible_user_dir }}/.dotfiles/tmux/tmux.conf"
+#        dest: "{{ ansible_user_dir }}/.config/"
+#        mode: "0644"
+#        directory_mode: "0755"
+#        force: true
+#      tags:
+#        - mac-minimal
+#        - mac-full
+#        - linux
+
+## zsh
+    - name: "MacOS | Install ZSH"
+      homebrew:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - zsh
+      tags:
+        - mac-minimal
+        - mac-full
+
+    - name: "Debian | Install Zsh"
+      apt:
+        name: zsh
+        state: present
+      become: true
+      tags:
+        - linux
+
+    # - name: Remove existing .zshrc file
+    #   file:
+    #     path: "{{ ansible_env.HOME }}/.zshrc"
+    #     state: absent
+    #   tags:
+    #     - mac-minimal
+    #     - mac-full
+    #     - linux
+
+    # - name: "Zsh | Configure .zshrc using Stow"
+    #   ansible.builtin.command:
+    #     cmd: "stow -d {{ ansible_user_dir }}/.dotfiles -t {{ ansible_env.HOME }} zsh"
+    #   tags:
+    #     - mac-minimal
+    #     - mac-full
+    #     - linux
+
+#    - name: "Zsh | Configure .zshrc"
+#      ansible.builtin.copy:
+#        src: "{{ ansible_user_dir }}/.dotfiles/zsh/.zshrc"
+#        dest: "{{ ansible_user_dir }}/"
+#        force: true
+#      tags:
+#        - mac-minimal
+#        - mac-full
+#        - linux
+
+    - name: "Zsh | Detect oh-my-zsh"
+      ansible.builtin.stat:
+        path: "{{ ansible_user_dir }}/.oh-my-zsh"
+      register: ohmyzsh
+      tags:
+        - mac-minimal
+        - mac-full
+        - linux
+
+    - name: "Zsh | Install oh-my-zsh if not installed"
+      when: not ohmyzsh.stat.exists
+      tags:
+        - mac-minimal
+        - mac-full
+        - linux
+      block:
+        - name: "Zsh | Download oh-my-zsh Install Script"
+          ansible.builtin.get_url:
+            url: "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
+            dest: "{{ ansible_user_dir }}/oh-my-zsh.install.sh"
+            mode: "0755"
+
+        - name: "Zsh | Run oh-my-zsh Install Script"
+          ansible.builtin.command:
+            cmd: "sh {{ ansible_user_dir }}/oh-my-zsh.install.sh"
+
+        - name: "Zsh | Cleanup Oh My Zsh Install Script"
+          ansible.builtin.file:
+            path: "{{ ansible_env.HOME }}/oh-my-zsh.install.sh"
+            state: absent
+
+    - name: Clone zsh-syntax-highlighting repository
+      ansible.builtin.git:
+        repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+        dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+        depth: 1
+      tags:
+        - mac-minimal
+        - mac-full
+        - linux
+
+    # - name: Add zsh-syntax-highlighting to .zshrc
+    #   ansible.builtin.lineinfile:
+    #     dest: "{{ ansible_user_dir }}/.zshrc"
+    #     line: "source {{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    #   tags:
+    #     - mac-minimal
+    #     - mac-full
+    #     - linux
+
+    - name: Clone zsh-autosuggestions repository
+      ansible.builtin.git:
+        repo: https://github.com/zsh-users/zsh-autosuggestions.git
+        dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+        depth: 1
+      tags:
+        - mac-minimal
+        - mac-full
+        - linux
+
+    # - name: Add zsh-autosuggestions to .zshrc
+    #   ansible.builtin.lineinfile:
+    #     dest: "{{ ansible_user_dir }}/.zshrc"
+    #     line: "source {{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    #   tags:
+    #     - mac-minimal
+    #     - mac-full
+    #     - linux
+
+    - name: "Zsh | Update .zshrc for all users"
+      shell: |
+        source ~/.zshrc
+      args:
+        executable: /bin/zsh
+      tags:
+        - mac-minimal
+        - mac-full
+        - linux
+
+    - name: Remove existing .zshrc file
+      file:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        state: absent
+      tags:
+        - mac-minimal
+        - mac-full
+        - linux
+
+    - name: "Zsh | Configure .zshrc using Stow"
+      ansible.builtin.command:
+        cmd: "stow -d {{ ansible_user_dir }}/.dotfiles -t {{ ansible_env.HOME }} zsh"
+      tags:
+        - mac-minimal
+        - mac-full
+        - linux
