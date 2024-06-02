@@ -1,3 +1,10 @@
+---
+- name: Post Stow Configuration
+  hosts: localhost
+  vars:
+    github_username: "suyashbhawsar"
+  tasks:
+
     - debug:
         msg:
         - "It is working now!"
