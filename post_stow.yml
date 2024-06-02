@@ -5,8 +5,10 @@
     github_username: "suyashbhawsar"
   tasks:
 
-    - debug:
-        msg:
+    - name: Print a list of items
+      debug:
+        msg: "Item: {{ item }}"
+      loop:
         - "It is working now!"
         - "It is working now!"
         - "It is working now!"
