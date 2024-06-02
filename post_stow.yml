@@ -5,6 +5,17 @@
     github_username: "suyashbhawsar"
   tasks:
 
+    - debug:
+        msg:
+        - "It is working now!"
+        - "It is working now!"
+        - "It is working now!"
+        - "It is working now!"
+        - "It is working now!"
+        - "It is working now!"
+        - "It is working now!"
+        - "It is working now!"
+
     - name: "MacOS | Install 1Password and 1Password CLI"
       homebrew:
         name: "{{ item }}"
