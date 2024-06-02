@@ -17,6 +17,10 @@
         - "It is working now!"
         - "It is working now!"
         - "It is working now!"
+      tags:
+        - mac-minimal
+        - mac-full
+        - linux
 
     - name: "MacOS | Install 1Password and 1Password CLI"
       homebrew:
