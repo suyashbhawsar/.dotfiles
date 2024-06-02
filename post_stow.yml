@@ -5,19 +5,6 @@
     github_username: "suyashbhawsar"
   tasks:
 
-    - name: Print a list of items
-      debug:
-        msg: "Item: {{ item }}"
-      loop:
-        - "It is working now!"
-        - "It is working now!"
-        - "It is working now!"
-        - "It is working now!"
-        - "It is working now!"
-        - "It is working now!"
-        - "It is working now!"
-        - "It is working now!"
-
     - name: "MacOS | Install 1Password and 1Password CLI"
       homebrew:
         name: "{{ item }}"
