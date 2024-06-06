@@ -18,11 +18,11 @@
 
 
 ## Docker Desktop
-    - name: "MacOS | Install Docker Desktop"
-      command: brew install --cask docker
-      tags:
-        - mac-minimal
-        - mac-full
+#    - name: "MacOS | Install Docker Desktop"
+#      command: brew install --cask docker
+#      tags:
+#        - mac-minimal
+#        - mac-full
 
 
 ## Google Cloud SDK
