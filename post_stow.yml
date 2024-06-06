@@ -16,7 +16,19 @@
       tags:
         - mac-full
 
-# ###gcloud
+
+## Docker Desktop
+    - name: "MacOS | Install Docker Desktop"
+      homebrew:
+        name: docker
+        cask: yes
+        state: present
+      tags:
+        - mac-minimal
+        - mac-full
+
+
+## Google Cloud SDK
     - name: Include vars file from the cloned repo
       include_vars:
         file: "{{ ansible_user_dir }}/.dotfiles/gcloud/gcloud_credentials.yml"
@@ -51,7 +63,6 @@
       become: true
       tags:
         - linux
-
 
     - name: Add Google Cloud SDK repository
       copy:
@@ -96,7 +107,6 @@
         - mac-full
         - linux
 
-
     - name: Authenticate with service account
       command: gcloud auth activate-service-account --key-file "~/.gcp_keys/service-account.json"
       become: false
@@ -105,7 +115,7 @@
         - linux
 
 
-## kitty
+## Kitty terminal
     - name: "MacOS | Install Kitty emulator"
       homebrew:
         name: kitty
@@ -114,7 +124,7 @@
         - mac-full
 
 
-## neovim
+## Neovim
     - name: "MacOS | Install Neovim & its Dependencies"
       homebrew:
         name: "{{ item }}"
@@ -161,7 +171,7 @@
         - linux
 
 
-##obsidian
+## Obsidian
     - name: "MacOS | Install Obsidian"
       homebrew:
         name: obsidian
@@ -171,7 +181,7 @@
         - mac-full
 
 
-## tmux
+## Tmux
     - name: "MacOS | Install tmux"
       homebrew:
         name: tmux
@@ -197,7 +207,7 @@
         - linux
 
 
-## zsh
+## Zsh
     - name: "MacOS | Install ZSH"
       homebrew:
         name: "{{ item }}"
