@@ -29,6 +29,7 @@
     - name: Include vars file from the cloned repo
       include_vars:
         file: "{{ ansible_user_dir }}/.dotfiles/gcloud/gcloud_credentials.yml"
+      become: false
       tags:
         - mac-minimal
         - mac-full
@@ -159,6 +160,7 @@
         mode: "0755"
         path: "{{ ansible_user_dir }}/.config/nvim"
         state: directory
+      become: false
       tags:
         - mac-minimal
         - mac-full
@@ -195,6 +197,7 @@
     - name: "Tmux | Configure tmux using Stow"
       ansible.builtin.command:
         cmd: "stow -d {{ ansible_user_dir }}/.dotfiles -t {{ ansible_env.HOME }} tmux"
+      become: false
       tags:
         - mac-minimal
         - mac-full
@@ -204,10 +207,8 @@
 ## Zsh
     - name: "MacOS | Install ZSH"
       homebrew:
-        name: "{{ item }}"
+        name: zsh
         state: present
-      loop:
-        - zsh
       tags:
         - mac-minimal
         - mac-full
@@ -251,6 +252,7 @@
       ansible.builtin.stat:
         path: "{{ ansible_user_dir }}/.oh-my-zsh"
       register: ohmyzsh
+      become: false
       tags:
         - mac-minimal
         - mac-full
@@ -262,27 +264,32 @@
         - mac-minimal
         - mac-full
         - linux
+      become: false
       block:
         - name: "Zsh | Download oh-my-zsh Install Script"
           ansible.builtin.get_url:
             url: "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
             dest: "{{ ansible_user_dir }}/oh-my-zsh.install.sh"
             mode: "0755"
+          become: false
 
         - name: "Zsh | Run oh-my-zsh Install Script"
           ansible.builtin.command:
             cmd: "sh {{ ansible_user_dir }}/oh-my-zsh.install.sh"
+         become: false
 
         - name: "Zsh | Cleanup Oh My Zsh Install Script"
           ansible.builtin.file:
             path: "{{ ansible_env.HOME }}/oh-my-zsh.install.sh"
             state: absent
+          become: false
 
     - name: Clone zsh-syntax-highlighting repository
       ansible.builtin.git:
         repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
         dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
         depth: 1
+      become: false
       tags:
         - mac-minimal
         - mac-full
@@ -302,6 +309,7 @@
         repo: https://github.com/zsh-users/zsh-autosuggestions.git
         dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
         depth: 1
+      become: false
       tags:
         - mac-minimal
         - mac-full
@@ -321,6 +329,7 @@
         source ~/.zshrc
       args:
         executable: /bin/zsh
+      become: false
       tags:
         - mac-minimal
         - mac-full
@@ -330,6 +339,7 @@
       file:
         path: "{{ ansible_env.HOME }}/.zshrc"
         state: absent
+      become: false
       tags:
         - mac-minimal
         - mac-full
@@ -338,6 +348,7 @@
     - name: "Zsh | Configure .zshrc using Stow"
       ansible.builtin.command:
         cmd: "stow -d {{ ansible_user_dir }}/.dotfiles -t {{ ansible_env.HOME }} zsh"
+      become: false
       tags:
         - mac-minimal
         - mac-full
