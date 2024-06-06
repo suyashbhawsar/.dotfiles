@@ -19,10 +19,7 @@
 
 ## Docker Desktop
     - name: "MacOS | Install Docker Desktop"
-      homebrew:
-        name: docker
-        cask: yes
-        state: present
+      command: brew install --cask docker
       tags:
         - mac-minimal
         - mac-full
