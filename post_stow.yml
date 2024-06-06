@@ -36,11 +36,8 @@
 
     - name: "MacOS | Install Google Cloud SDK"
       homebrew:
-        name: "{{ item }}"
+        name: google-cloud-sdk
         state: present
-      with_items:
-        - 1password
-        - 1password-cli
       tags:
         - mac-full
 
