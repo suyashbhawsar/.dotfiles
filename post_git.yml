@@ -26,15 +26,6 @@
 
 
 ## Google Cloud SDK
-    - name: Include vars file from the cloned repo
-      include_vars:
-        file: "{{ ansible_user_dir }}/.dotfiles/gcloud/gcloud_credentials.yml"
-      become: false
-      tags:
-        - mac-minimal
-        - mac-full
-        - linux
-
     - name: "MacOS | Install Google Cloud SDK"
       homebrew:
         name: google-cloud-sdk
