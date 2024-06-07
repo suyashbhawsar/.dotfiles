@@ -106,100 +106,118 @@ ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags linux remove.ym
 
 #### `Dockerfile`:
 Defines the Docker image with all necessary dependencies for running Ansible on a Debian-based system.
+
 #### `macOS-setup.sh`:
 Shell script to install Homebrew, Python, and Ansible on macOS.
+
 #### `credentials.yml`:
 Stores variables for both plain text and encrypted credentials, used within the playbooks.
+
 #### `personal_git.yml` & `work_git.yml`:
 These Ansible playbooks are designed to configure Git settings, manage SSH keys, and clone `.dotfiles` Git repository. Below is a detailed explanation of each section and task in the playbook:
-    - Playbook Overview:
-        - Variable Files:
-            - credentials.yml (This file contains sensitive information such as your personal Git username, email, and SSH keys.)
-        - Tasks Breakdown:
-            a. **Git Configuration:**  
-                **Task 1:** Set Git user.name   
-                ```yaml
-                - name: "Git | Set user.name"
-                community.general.git_config:
-                    name: user.name
-                    scope: global
-                    value: "{{ personal_git_username }}"
-                become: false
-                ```
-                - **Purpose**: Configures the global Git username.
-                - **Details**:
-                    - **Module**: `community.general.git_config`
-                    - **Parameter `name`**: Sets the Git configuration variable `user.name`.
-                    - **Parameter `scope`**: `global` indicates the setting is applied globally.
-                    - **Parameter `value`**: Uses the variable `personal_git_username` (personal_git.yml) or `work_git_username` (work_git.yml) from `credentials.yml`.
-                    - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
-                **Task 2:** Set Git user.email
-                ```yaml
-                    - name: "Git | Set user.email"
-                    community.general.git_config:
-                        name: user.email
-                        scope: global
-                        value: "{{ personal_git_email }}"
-                    become: false
-                ```
-                - **Purpose**: Configures the global Git email.
-                - **Details**:
-                    - **Module**: `community.general.git_config`
-                    - **Parameter `name`**: Sets the Git configuration variable `user.email`.
-                    - **Parameter `scope`**: `global` indicates the setting is applied globally.
-                    - **Parameter `value`**: Uses the variable `personal_git_email` (personal_git.yml) or `work_git_email` (work_git.yml) from `credentials.yml`.
-                    - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
-            b. **SSH Key Management**
-                **Task 3:** Create `.ssh` Directory
-                ```yaml
-                - name: Create .ssh directory
-                file:
-                    path: "{{ ansible_user_dir }}/.ssh"
-                    state: directory
-                    mode: '0700'
-                become: false
-                ```
-                - **Purpose**: Ensures the existence of the `.ssh` directory with the correct permissions.
-                - **Details**:
-                    - **Module**: `file`
-                    - **Parameter `path`**: Creates the directory at the path `{{ ansible_user_dir }}/.ssh`.
-                    - **Parameter `state`**: `directory` ensures the path is a directory.
-                    - **Parameter `mode`**: Sets permissions to `0700` (read, write, execute for owner only).
-                    - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
-                **Task 4:** Copy Public SSH Key
-                ```yaml
-                - name: "SSH | Copy personal_rsa Public SSH key"
-                copy:
-                    dest: "{{ ansible_user_dir }}/.ssh/personal_rsa.pub"
-                    content: "{{ personal_ssh_key_public }}"
-                    mode: '0644'
-                become: false
-                ```
-                - **Purpose**: Copies the public SSH key to the `.ssh` directory.
-                - **Details**:
-                    - **Module**: `copy`
-                    - **Parameter `dest`**: Destination path for the public key.
-                    - **Parameter `content`**: Uses the variable personal_ssh_key_public (personal_git.yml) or work_ssh_key_public (work_git.yml) from credentials.yml.
-                    - **Parameter `mode`**: Sets permissions to 0644 (read and write for owner, read for others).
-                    - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
-                **Task 5:** Copy Private SSH Key
-                ```yaml
-                - name: "SSH | Copy personal_rsa Private SSH key"
-                copy:
-                    dest: "{{ ansible_user_dir }}/.ssh/personal_rsa"
-                    content: "{{ personal_ssh_key_private }}"
-                    mode: '0600'
-                become: false
-                ```
-                - **Purpose**: Copies the private SSH key to the `.ssh` directory.
-                - **Details**:
-                    - **Module**: `copy`
-                    - **Parameter `dest`**: Destination path for the private key.
-                    - **Parameter `content`**: Uses the variable personal_ssh_key_private (personal_git.yml) or work_ssh_key_private (work_git.yml) from credentials.yml.
-                    - **Parameter `mode`**: Sets permissions to 0600 (read and write for owner only).
-                    - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
 
+- Playbook Overview:
+    - Variable Files:
+        - `credentials.yml` (This file contains sensitive information such as your personal Git username, email, and SSH keys.)
+    - Tasks Breakdown:
+        1. **Git Configuration**
 
+            **Task 1:** Set Git user.name
+
+            ```yaml
+            - name: "Git | Set user.name"
+              community.general.git_config:
+                name: user.name
+                scope: global
+                value: "{{ personal_git_username }}"
+              become: false
+            ```
+
+            - **Purpose**: Configures the global Git username.
+            - **Details**:
+                - **Module**: `community.general.git_config`
+                - **Parameter `name`**: Sets the Git configuration variable `user.name`.
+                - **Parameter `scope`**: `global` indicates the setting is applied globally.
+                - **Parameter `value`**: Uses the variable `personal_git_username` (personal_git.yml) or `work_git_username` (work_git.yml) from `credentials.yml`.
+                - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
+
+            **Task 2:** Set Git user.email
+
+            ```yaml
+            - name: "Git | Set user.email"
+              community.general.git_config:
+                name: user.email
+                scope: global
+                value: "{{ personal_git_email }}"
+              become: false
+            ```
+
+            - **Purpose**: Configures the global Git email.
+            - **Details**:
+                - **Module**: `community.general.git_config`
+                - **Parameter `name`**: Sets the Git configuration variable `user.email`.
+                - **Parameter `scope`**: `global` indicates the setting is applied globally.
+                - **Parameter `value`**: Uses the variable `personal_git_email` (personal_git.yml) or `work_git_email` (work_git.yml) from `credentials.yml`.
+                - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
+
+        2. **SSH Key Management**
+
+            **Task 3:** Create `.ssh` Directory
+
+            ```yaml
+            - name: Create .ssh directory
+              file:
+                path: "{{ ansible_user_dir }}/.ssh"
+                state: directory
+                mode: '0700'
+              become: false
+            ```
+
+            - **Purpose**: Ensures the existence of the `.ssh` directory with the correct permissions.
+            - **Details**:
+                - **Module**: `file`
+                - **Parameter `path`**: Creates the directory at the path `{{ ansible_user_dir }}/.ssh`.
+                - **Parameter `state`**: `directory` ensures the path is a directory.
+                - **Parameter `mode`**: Sets permissions to `0700` (read, write, execute for owner only).
+                - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
+
+            **Task 4:** Copy Public SSH Key
+
+            ```yaml
+            - name: "SSH | Copy personal_rsa Public SSH key"
+              copy:
+                dest: "{{ ansible_user_dir }}/.ssh/personal_rsa.pub"
+                content: "{{ personal_ssh_key_public }}"
+                mode: '0644'
+              become: false
+            ```
+
+            - **Purpose**: Copies the public SSH key to the `.ssh` directory.
+            - **Details**:
+                - **Module**: `copy`
+                - **Parameter `dest`**: Destination path for the public key.
+                - **Parameter `content`**: Uses the variable `personal_ssh_key_public` (personal_git.yml) or `work_ssh_key_public` (work_git.yml) from `credentials.yml`.
+                - **Parameter `mode`**: Sets permissions to `0644` (read and write for owner, read for others).
+                - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
+
+            **Task 5:** Copy Private SSH Key
+
+            ```yaml
+            - name: "SSH | Copy personal_rsa Private SSH key"
+              copy:
+                dest: "{{ ansible_user_dir }}/.ssh/personal_rsa"
+                content: "{{ personal_ssh_key_private }}"
+                mode: '0600'
+              become: false
+            ```
+
+            - **Purpose**: Copies the private SSH key to the `.ssh` directory.
+            - **Details**:
+                - **Module**: `copy`
+                - **Parameter `dest`**: Destination path for the private key.
+                - **Parameter `content`**: Uses the variable `personal_ssh_key_private` (personal_git.yml) or `work_ssh_key_private` (work_git.yml) from `credentials.yml`.
+                - **Parameter `mode`**: Sets permissions to `0600` (read and write for owner only).
+                - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
 
 #### `install.yml`:
 Ansible playbook that runs the post-stow configuration (from the private repository: .dotfiles) after installing and configuring packages.
