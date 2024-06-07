@@ -182,6 +182,7 @@ This `macOS-setup.sh` script is designed to automate the installation of essenti
         - **Details**:
             - Check: `command -v stow` checks if the `stow` command is available.
             - **Installation**: If Stow is not found, it is installed using Homebrew with the command `brew install stow`.
+
 ___
 
 ### `credentials.yml`:
@@ -248,6 +249,7 @@ The `credentials.yml` file is an Ansible variable file used to securely store se
         - **Details**:
             - **Variable Name**: `personal_ssh_key_private`
             - **Value**: Encrypted string (Private SSH Key) using Ansible Vault
+
 ___
 
 ### `personal_git.yml` & `work_git.yml`:
@@ -391,10 +393,33 @@ These Ansible playbooks are designed to configure Git settings, manage SSH keys,
                 - **Repository URL**: `git@github.com:{{ personal_git_username }}/.dotfiles.git`
                 - **Destination**: Clones into the `~/.dotfiles` directory.
                 - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
+
 ___
 
 ### `install.yml`:
 Ansible playbook that runs the post-stow configuration (from the private repository: .dotfiles) after installing and configuring packages.
+#### `install.yml`:
+
+The `install.yml` file is a part of the Ansible setup and is responsible for running post-configuration tasks after the initial git configuration. This file imports another playbook located in the user's home directory under `.dotfiles`.
+
+- File Overview:
+    - **File Name**: `install.yml`
+    - **Purpose**: Runs post-configuration tasks after git configuration by importing another playbook.
+- Variables Breakdown:
+    1. Running Post-Git Configuration
+
+        ```yaml
+        - name: Run post-git configuration
+          import_playbook: "{{ lookup('env', 'HOME') }}/.dotfiles/post_git.yml"
+        ```
+
+        - **Purpose**: Imports and runs the `post_git.yml` playbook located in the user's `.dotfiles` directory.
+        - **Details**:
+            - **Task Name**: Run post-git configuration
+            - **Module**: `import_playbook`
+            - **Parameter `import_playbook`**: Specifies the path to the `post_git.yml` playbook.
+                - **Path**: The path is dynamically set using `lookup('env', 'HOME')` to get the user's home directory and appending `.dotfiles/post_git.yml`.
+
 ___
 
 ### `remove.yml`:
