@@ -1,0 +1,53 @@
+---
+- name: play
+  hosts: localhost
+  tasks:
+
+## Git configuration
+    - name: "Git | Unset user.email"
+      community.general.git_config:
+        name: user.email
+        scope: global
+        state: absent
+      tags:
+        - mac
+        - linux
+
+    - name: "Git | Unset user.name"
+      community.general.git_config:
+        name: user.name
+        scope: global
+        state: absent
+      tags:
+        - mac
+        - linux
+
+
+## SSH configuration
+    - name: Remove .ssh directory
+      file:
+        path: "{{ ansible_user_dir }}/.ssh"
+        state: absent
+      tags:
+        - mac
+        - linux
+
+    - name: Stop SSH agent
+      shell: |
+        ssh_agent_pid=$(pgrep ssh-agent)
+        if [ -n "$ssh_agent_pid" ]; then
+          kill $ssh_agent_pid
+        fi
+      tags:
+        - mac
+        - linux
+
+## Remove the .dotfiles repository
+    - name: Remove the .dotfiles repository
+      file:
+        path: '{{ ansible_user_dir }}/.dotfiles'
+        state: absent
+      become: false
+      tags:
+        - mac
+        - linux
