@@ -3,45 +3,6 @@
   hosts: localhost
   tasks:
 
-## Git configuration
-    - name: "Git | Unset user.email"
-      community.general.git_config:
-        name: user.email
-        scope: global
-        state: absent
-      tags:
-        - mac
-        - linux
-
-    - name: "Git | Unset user.name"
-      community.general.git_config:
-        name: user.name
-        scope: global
-        state: absent
-      tags:
-        - mac
-        - linux
-
-
-## SSH configuration
-    - name: Remove .ssh directory
-      file:
-        path: "{{ ansible_user_dir }}/.ssh"
-        state: absent
-      tags:
-        - mac
-        - linux
-
-    - name: Stop SSH agent
-      shell: |
-        ssh_agent_pid=$(pgrep ssh-agent)
-        if [ -n "$ssh_agent_pid" ]; then
-          kill $ssh_agent_pid
-        fi
-      tags:
-        - mac
-        - linux
-
 
 ## GNU Stow unstow configurations
     - name: "Unstow Zsh configuration"
@@ -55,17 +16,6 @@
     - name: "Unstow Tmux configuration"
       ansible.builtin.command:
          cmd: "stow -D -d {{ ansible_user_dir }}/.dotfiles -t {{ ansible_env.HOME }} tmux"
-      become: false
-      tags:
-        - mac
-        - linux
-
-
-## Remove the .dotfiles repository
-    - name: Remove the .dotfiles repository
-      file:
-        path: '{{ ansible_user_dir }}/.dotfiles'
-        state: absent
       become: false
       tags:
         - mac
@@ -239,17 +189,6 @@
         - mac
 
 
-## Remove the configs repo
-    - name: Remove .dotfiles directory
-      ansible.builtin.file:
-        path: "{{ ansible_user_dir }}/.dotfiles"
-        state: absent
-      become: false
-      tags:
-        - linux
-        - mac
-
-
 ## Zsh
     - name: "Debian | Uninstall Zsh"
       ansible.builtin.apt:
@@ -274,21 +213,4 @@
       become: false
       tags:
         - mac
-        - linux
-
-
-## GNU Stow removal
-    - name: "MacOS | Uninstall GNU Stow"
-      homebrew:
-        name: stow
-        state: absent
-      tags:
-        - mac
-
-    - name: "Debian | Uninstall GNU Stow"
-      apt:
-        name: stow
-        state: absent
-      become: true
-      tags:
         - linux
