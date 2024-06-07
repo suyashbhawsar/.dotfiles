@@ -43,6 +43,7 @@
         - mac
         - linux
 
+
 ## Remove the .dotfiles repository
     - name: Remove the .dotfiles repository
       file:
