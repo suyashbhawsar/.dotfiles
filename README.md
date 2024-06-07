@@ -106,6 +106,7 @@ ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags linux remove.ym
 
 ### `Dockerfile`:
 Defines the Docker image with all necessary dependencies for running Ansible on a Debian-based system.
+___
 
 ### `macOS-setup.sh`:
 This `macOS-setup.sh` script is designed to automate the installation of essential development tools on macOS. It checks for the presence of Homebrew, Python3, Ansible, and Stow, and installs them if they are not already installed. The script ensures that your development environment is set up correctly and efficiently.
@@ -181,9 +182,73 @@ This `macOS-setup.sh` script is designed to automate the installation of essenti
         - **Details**:
             - Check: `command -v stow` checks if the `stow` command is available.
             - **Installation**: If Stow is not found, it is installed using Homebrew with the command `brew install stow`.
+___
 
 ### `credentials.yml`:
-Stores variables for both plain text and encrypted credentials, used within the playbooks.
+The `credentials.yml` file is an Ansible variable file used to securely store sensitive information such as Git credentials and SSH keys. This file utilizes Ansible Vault to encrypt sensitive data, ensuring that it remains secure. Below is a detailed explanation of the contents and structure of the `credentials.yml` file.
+
+- Script Overview:
+    - **File Name**: `credentials.yml`
+    - **Purpose**: Stores sensitive personal and work-related credentials securely using Ansible Vault.
+- Variables Breakdown:
+    1. `personal_git_username`
+
+        ```yaml
+        personal_git_username: "suyashbhawsar"
+        ```
+
+        - **Purpose**: Placeholder for personal Git username.
+        - **Details**:
+            - **Variable Name**: `personal_git_username`
+            - **Value**: `"suyashbhawsar"` (Your GitHub Personal Account username)
+    
+    2. `personal_git_email`
+
+        ```yaml
+        personal_git_email: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          33346234333739633337643138353332646438646539616138623136376665633937623934346566
+          3933366634383537336536363632653661303363373364380a653537366431643161633236613764
+          35373037313433373638613961383632656634316530633231636633636663313330333364633634
+          3434626335323037300a313530333937653866663461663137663530363330336538326466353262
+          37386434363661303766366365633235316363613738333031396630323031343933
+        ```
+
+        - **Purpose**: Placeholder for encrypted personal Git email address.
+        - **Details**:
+            - **Variable Name**: `personal_git_email`
+            - **Value**: Encrypted string (Email Address) using Ansible Vault
+    
+    3. `personal_ssh_key_public`
+
+        ```yaml
+        personal_ssh_key_public: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          63643130346438346133376336613730356562616464373633636361656633663265616538313466
+          3763336434343962623138343331326333333061663433350a306261623037343063396135636635
+          ....
+        ```
+
+        - **Purpose**: Placeholder for encrypted public SSH key.
+        - **Details**:
+            - **Variable Name**: `personal_ssh_key_public`
+            - **Value**: Encrypted string (Public SSH Key) using Ansible Vault
+    
+    4. `personal_ssh_key_private`
+
+        ```yaml
+        personal_ssh_key_private: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          36343535663139613931343264303465623830653539386133653236626363323839643963346365
+          6339353936343531636262326437396263643261636435330a663734353937363533306335666164
+          ....
+        ```
+
+        - **Purpose**: Placeholder for encrypted private SSH key.
+        - **Details**:
+            - **Variable Name**: `personal_ssh_key_private`
+            - **Value**: Encrypted string (Private SSH Key) using Ansible Vault
+___
 
 ### `personal_git.yml` & `work_git.yml`:
 These Ansible playbooks are designed to configure Git settings, manage SSH keys, and clone `.dotfiles` Git repository. Below is a detailed explanation of each section and task in the playbook:
@@ -326,10 +391,11 @@ These Ansible playbooks are designed to configure Git settings, manage SSH keys,
                 - **Repository URL**: `git@github.com:{{ personal_git_username }}/.dotfiles.git`
                 - **Destination**: Clones into the `~/.dotfiles` directory.
                 - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
-
+___
 
 ### `install.yml`:
 Ansible playbook that runs the post-stow configuration (from the private repository: .dotfiles) after installing and configuring packages.
+___
 
 ### `remove.yml`:
 Playbook to remove installed packages and configurations.
