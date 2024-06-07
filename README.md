@@ -104,16 +104,88 @@ ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags linux remove.ym
 
 ## **File Descriptions:**
 
-#### `Dockerfile`:
+### `Dockerfile`:
 Defines the Docker image with all necessary dependencies for running Ansible on a Debian-based system.
 
-#### `macOS-setup.sh`:
-Shell script to install Homebrew, Python, and Ansible on macOS.
+### `macOS-setup.sh`:
+This `macOS-setup.sh` script is designed to automate the installation of essential development tools on macOS. It checks for the presence of Homebrew, Python3, Ansible, and Stow, and installs them if they are not already installed. The script ensures that your development environment is set up correctly and efficiently.
 
-#### `credentials.yml`:
+
+- Script Overview:
+    - **File Name**: `macOS-setup.sh`
+    - **Purpose**: Automates the installation of Homebrew, Python3, Ansible, and Stow on macOS.
+- Script Breakdown:
+    1. Checking and Installing Homebrew
+
+        ```bash
+        if ! command -v brew >/dev/null 2>&1; then
+          echo -e "\033[1;34mInstalling Homebrew\033[0m"
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+        else
+          echo -e "\033[1;34mHomebrew is already installed\033[0m"
+        fi
+        ```
+
+        - **Purpose**: Checks if Homebrew is installed and installs it if not.
+        - **Details**:
+            - Check: `command -v brew` checks if the `brew` command is available.
+            - **Installation**: If Homebrew is not found, it is installed using the official installation script from Homebrew's GitHub repository.
+            - **Environment Setup**: Adds Homebrew to the shell environment by appending `eval "$(/opt/homebrew/bin/brew shellenv)"` to `~/.zprofile` and then evaluates the command.
+            
+    2. Checking and Installing Python3
+
+        ```bash
+        if ! command -v python3 >/dev/null 2>&1; then
+          echo -e "\033[1;34mInstalling Python\033[0m"
+          brew install python
+        else
+          echo -e "\033[1;34mPython is already installed\033[0m"
+        fi
+        ```
+
+        - **Purpose**: Checks if Python3 is installed and installs it if not.
+        - **Details**:
+            - Check: `command -v python3` checks if the `python3` command is available.
+            - **Installation**: If Python3 is not found, it is installed using Homebrew with the command `brew install python`.
+
+    3. Checking and Installing Ansible
+
+        ```bash
+        if ! command -v ansible >/dev/null 2>&1; then
+          echo -e "\033[1;34mInstalling Ansible\033[0m"
+          brew install ansible
+        else
+          echo -e "\033[1;34mAnsible is already installed\033[0m"
+        fi
+        ```
+
+        - **Purpose**: Checks if Ansible is installed and installs it if not.
+        - **Details**:
+            - Check: `command -v ansible` checks if the `ansible` command is available.
+            - **Installation**: If Ansible is not found, it is installed using Homebrew with the command `brew install ansible`.
+
+    4. Checking and Installing Stow
+
+        ```bash
+        if ! command -v stow >/dev/null 2>&1; then
+          echo -e "\033[1;34mInstalling Stow\033[0m"
+          brew install stow
+        else
+          echo -e "\033[1;34mStow is already installed\033[0m"
+        fi
+        ```
+
+        - **Purpose**: Checks if Stow is installed and installs it if not.
+        - **Details**:
+            - Check: `command -v stow` checks if the `stow` command is available.
+            - **Installation**: If Stow is not found, it is installed using Homebrew with the command `brew install stow`.
+
+### `credentials.yml`:
 Stores variables for both plain text and encrypted credentials, used within the playbooks.
 
-#### `personal_git.yml` & `work_git.yml`:
+### `personal_git.yml` & `work_git.yml`:
 These Ansible playbooks are designed to configure Git settings, manage SSH keys, and clone `.dotfiles` Git repository. Below is a detailed explanation of each section and task in the playbook:
 
 - Playbook Overview:
@@ -256,8 +328,8 @@ These Ansible playbooks are designed to configure Git settings, manage SSH keys,
                 - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
 
 
-#### `install.yml`:
+### `install.yml`:
 Ansible playbook that runs the post-stow configuration (from the private repository: .dotfiles) after installing and configuring packages.
 
-#### `remove.yml`:
+### `remove.yml`:
 Playbook to remove installed packages and configurations.
