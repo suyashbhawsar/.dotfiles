@@ -3,6 +3,7 @@
   hosts: localhost
   tasks:
 
+
 ## Git configuration
     - name: "Git | Unset user.email"
       community.general.git_config:
