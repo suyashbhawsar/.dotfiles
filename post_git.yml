@@ -276,7 +276,7 @@
         - name: "Zsh | Run oh-my-zsh Install Script"
           ansible.builtin.command:
             cmd: "sh {{ ansible_user_dir }}/oh-my-zsh.install.sh"
-         become: false
+          become: false
 
         - name: "Zsh | Cleanup Oh My Zsh Install Script"
           ansible.builtin.file:
