@@ -1,10 +1,10 @@
 # **dotfiles**
 
-1. [File Descriptions](#file-descriptions)
-2. [Execution](#execution)
+1. [Execution](#execution)
     - [Encrypting Keys](#encrypting-keys)
     - [macOS](#macos)
     - [Linux](#linux)
+2. [File Descriptions](#file-descriptions)
     
 ---
      
@@ -99,8 +99,8 @@ ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags linux remove.ym
 - `Dockerfile`: Defines the Docker image with all necessary dependencies for running Ansible on a Debian-based system.
 - `macOS-setup.sh`: Shell script to install Homebrew, Python, and Ansible on macOS.
 - `credentials.yml`: Stores variables for both plain text and encrypted credentials, used within the playbooks.
-- `personal_git.yml` & `work_git.yml`: This Ansible playbook is designed to configure Git settings, manage SSH keys, and clone a specific Git repository. Below is a detailed explanation of each section and task in the playbook.
-    - Playbook Overview
+- `personal_git.yml` & `work_git.yml`: These Ansible playbooks are designed to configure Git settings, manage SSH keys, and clone `.dotfiles` Git repository. Below is a detailed explanation of each section and task in the playbook:
+    - Playbook Overview:
         - Variable Files:
             - credentials.yml (This file contains sensitive information such as your personal Git username, email, and SSH keys.)
         - Tasks Breakdown:
@@ -179,13 +179,34 @@ ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags linux remove.ym
                 become: false
                 ```
     
-                - **Purpose**: Ensures the existence of the `.ssh` directory with the correct permissions.
+                - **Purpose**: Copies the public SSH key to the `.ssh` directory.
                 - **Details**:
-                    - **Module**: `file`
-                    - **Parameter `path`**: Creates the directory at the path `{{ ansible_user_dir }}/.ssh`.
-                    - **Parameter `state`**: `directory` ensures the path is a directory.
-                    - **Parameter `mode`**: Sets permissions to `0700` (read, write, execute for owner only).
+                    - **Module**: `copy`
+                    - **Parameter `dest`**: Destination path for the public key.
+                    - **Parameter `content`**: Uses the variable personal_ssh_key_public (personal_git.yml) or work_ssh_key_public (work_git.yml) from credentials.yml.
+                    - **Parameter `mode`**: Sets permissions to 0644 (read and write for owner, read for others).
                     - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
+
+                **Task 5:** Copy Private SSH Key
+    
+                ```yaml
+                - name: "SSH | Copy personal_rsa Private SSH key"
+                copy:
+                    dest: "{{ ansible_user_dir }}/.ssh/personal_rsa"
+                    content: "{{ personal_ssh_key_private }}"
+                    mode: '0600'
+                become: false
+                ```
+    
+                - **Purpose**: Copies the private SSH key to the `.ssh` directory.
+                - **Details**:
+                    - **Module**: `copy`
+                    - **Parameter `dest`**: Destination path for the private key.
+                    - **Parameter `content`**: Uses the variable personal_ssh_key_private (personal_git.yml) or work_ssh_key_private (work_git.yml) from credentials.yml.
+                    - **Parameter `mode`**: Sets permissions to 0600 (read and write for owner only).
+                    - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
+
+
 
 - `install.yml`: Ansible playbook that runs the post-stow configuration (from the private repository: .dotfiles) after installing and configuring packages.
 - `remove.yml`: Playbook to remove installed packages and configurations.
