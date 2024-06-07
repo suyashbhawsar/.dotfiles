@@ -219,6 +219,43 @@ These Ansible playbooks are designed to configure Git settings, manage SSH keys,
                 - **Parameter `mode`**: Sets permissions to `0600` (read and write for owner only).
                 - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
 
+        3. **Repository Management (Only in `personal_git.yml`)**
+
+            **Task 6:** Remove Existing Repository Directory
+
+            ```yaml
+            - name: Remove repository directory
+              file:
+                path: ~/.dotfiles
+                state: absent
+              become: false
+            ```
+
+            - **Purpose**: Ensures the removal of any existing `.dotfiles` directory to avoid conflicts.
+            - **Details**:
+                - **Module**: `file`
+                - **Parameter `path`**: Path to the `.dotfiles` directory.
+                - **Parameter `state`**: `absent` ensures the directory is removed if it exists.
+                - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
+
+            **Task 7:** Clone Repository
+
+            ```yaml
+            - name: Clone repository
+              shell: GIT_SSH_COMMAND="ssh -i ~/.ssh/temp" git clone git@github.com:{{ personal_git_username }}/.dotfiles.git ~/.dotfiles
+              become: false
+            ```
+
+            - **Purpose**: Clones the specified Git repository into the `.dotfiles` directory.
+            - **Details**:
+                - **Module**: `shell`
+                - **Command**: Uses a custom SSH command to clone the repository from GitHub.
+                - **Parameter `GIT_SSH_COMMAND`**: Specifies the SSH command with the appropriate private key.
+                - **Repository URL**: `git@github.com:{{ personal_git_username }}/.dotfiles.git`
+                - **Destination**: Clones into the `~/.dotfiles` directory.
+                - **Parameter `become`**: `false` ensures that the task does not require elevated privileges.
+
+
 #### `install.yml`:
 Ansible playbook that runs the post-stow configuration (from the private repository: .dotfiles) after installing and configuring packages.
 
