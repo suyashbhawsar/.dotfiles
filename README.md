@@ -5,12 +5,12 @@
     - [macOS](#macos)
     - [Linux](#linux)
 2. [File Descriptions](#file-descriptions)
-    - [Dockerfile](#encrypting-keys)
-    - [macOS-setup.sh](#macos)
-    - [credentials.yml](#linux)
-    - [personal_git.yml & work_git.yml](#linux)
-    - [install.yml](#linux)
-    - [remove.yml](#linux)
+    - [Dockerfile](#dockerfile)
+    - [macOS-setup.sh](#macos-setupsh)
+    - [credentials.yml](#credentialsyml)
+    - [personal_git.yml & work_git.yml](#personal_gityml--work_gityml)
+    - [install.yml](#installyml)
+    - [remove.yml](#removeyml)
 
 
 
@@ -104,10 +104,14 @@ ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags linux remove.ym
 
 ## **File Descriptions:**
 
-#### `Dockerfile`: Defines the Docker image with all necessary dependencies for running Ansible on a Debian-based system.
-#### `macOS-setup.sh`: Shell script to install Homebrew, Python, and Ansible on macOS.
-#### `credentials.yml`: Stores variables for both plain text and encrypted credentials, used within the playbooks.
-#### `personal_git.yml` & `work_git.yml`: These Ansible playbooks are designed to configure Git settings, manage SSH keys, and clone `.dotfiles` Git repository. Below is a detailed explanation of each section and task in the playbook:
+#### `Dockerfile`:
+Defines the Docker image with all necessary dependencies for running Ansible on a Debian-based system.
+#### `macOS-setup.sh`:
+Shell script to install Homebrew, Python, and Ansible on macOS.
+#### `credentials.yml`:
+Stores variables for both plain text and encrypted credentials, used within the playbooks.
+#### `personal_git.yml` & `work_git.yml`:
+These Ansible playbooks are designed to configure Git settings, manage SSH keys, and clone `.dotfiles` Git repository. Below is a detailed explanation of each section and task in the playbook:
     - Playbook Overview:
         - Variable Files:
             - credentials.yml (This file contains sensitive information such as your personal Git username, email, and SSH keys.)
@@ -216,5 +220,8 @@ ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags linux remove.ym
 
 
 
-#### `install.yml`: Ansible playbook that runs the post-stow configuration (from the private repository: .dotfiles) after installing and configuring packages.
-#### `remove.yml`: Playbook to remove installed packages and configurations.
+#### `install.yml`:
+Ansible playbook that runs the post-stow configuration (from the private repository: .dotfiles) after installing and configuring packages.
+
+#### `remove.yml`:
+Playbook to remove installed packages and configurations.
