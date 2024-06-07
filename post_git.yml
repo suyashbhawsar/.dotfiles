@@ -1,5 +1,5 @@
 ---
-- name: Post Stow Configuration
+- name: Post Git Configuration
   hosts: localhost
   vars:
     github_username: "suyashbhawsar"
