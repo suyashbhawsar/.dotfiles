@@ -20,9 +20,17 @@
 
 ### **Generate SSH Keys**:
 
+```bash
+ssh-keygen -t rsa -b 4096
+```
+
 ![generate_ssh_keys](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/generate_ssh_keys.png)
 
 ### **Check if the Key files are created**:
+
+```bash
+ls
+```
 
 ![list_the_keys](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/list_the_keys.png)
 
@@ -39,6 +47,8 @@ ansible-vault encrypt your_text_file
 ![encrypt_the_private_key_using_ansible_vault](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypt_the_private_key_using_ansible_vault.png)
 
 ### **Indent the Encrypted Key (two spaces)**:
+
+Tip: Open the file in **VS Code** press: _`Ctrl + a`_, then _`tab`_ and _`Ctrl + s`_.
 
 ![encrypted_and_indented_public_key](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypted_and_indented_public_key.png)
 
