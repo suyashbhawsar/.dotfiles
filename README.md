@@ -1,10 +1,15 @@
 # **dotfiles**
 
-1. [Execution](#execution)
-    - [Encrypting Keys](#encrypting-keys)
+1. [Setup](#setup)
+    - [Generate SSH Keys](#generate-ssh-keys)
+    - [Check if the Key files are created](#check-if-the-key-files-are-created)
+    - [Encrypt the key using Ansible Vault](#encrypt-the-key-using-ansible-vault)
+    - [Indent the Encrypted Key](#indent-the-encrypted-key-two-spaces)
+    - [Save the value in `credentials.yml`](#save-the-value-in-credentialsyml)
+3. [Execution](#execution)
     - [macOS](#macos)
     - [Linux](#linux)
-2. [File Descriptions](#file-descriptions)
+4. [File Descriptions](#file-descriptions)
     - [Dockerfile](#dockerfile)
     - [macOS-setup.sh](#macos-setupsh)
     - [credentials.yml](#credentialsyml)
@@ -15,10 +20,10 @@
 
 
 ---
-     
-## **Execution:**
 
-### **Generate SSH Keys**:
+## **Setup:**
+
+### **Generate SSH Keys:**
 
 ```bash
 ssh-keygen -t rsa -b 4096
@@ -26,7 +31,7 @@ ssh-keygen -t rsa -b 4096
 
 ![generate_ssh_keys](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/generate_ssh_keys.png)
 
-### **Check if the Key files are created**:
+### **Check if the Key files are created:**
 
 ```bash
 ls
@@ -34,7 +39,7 @@ ls
 
 ![list_the_keys](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/list_the_keys.png)
 
-### **Encrypt the key using Ansible Vault**:
+### **Encrypt the key using Ansible Vault:**
 
 Store a single key in a file `your_text_file` & encrypt like this for all the keys
 
@@ -46,20 +51,25 @@ ansible-vault encrypt your_text_file
 
 ![encrypt_the_private_key_using_ansible_vault](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypt_the_private_key_using_ansible_vault.png)
 
-### **Indent the Encrypted Key (two spaces)**:
+### **Indent the Encrypted Key (two spaces):**
 
 **Tip**: Open the file in **VS Code** press: _`Ctrl + a`_, then _`tab`_ and _`Ctrl + s`_.
 
 ![encrypted_and_indented_public_key](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypted_and_indented_public_key.png)
 
 
+## **Save the value in `credentials.yml`:**
 
+Store the encrypted & indented value in `credentials.yml` at the appropriate place while checking `personal_git.yml` or `work_git.yml` to ensure that the variable name is correct.
 
-Create a variable for the encrypted or plain text key and store it in `credentials.yml`.
-    
+![store_it_in_credentials.yml](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/store_it_in_credentials.yml.png)
+
 ---
-    
-## **`macOS`**
+___
+
+## **Execution:**
+
+## **`macOS`:**
 
 **Install Ansible & Homebrew:**
 
