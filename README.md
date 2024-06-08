@@ -18,9 +18,13 @@
      
 ## **Execution:**
 
+### **Generate SSH Keys**:
+
+
+
 ![execution](https://github.com/msanchariii/dotfiles/assets/113378204/5163ad49-277b-49c8-abda-7bb8b3d650c7)
      
-### **`Encrypting Keys`**
+### **Encrypting Keys**
 
 Store a single key in a file `your_text_file` & encrypt like this for all the keys
 
@@ -423,4 +427,4 @@ The `install.yml` file is a part of the Ansible setup and is responsible for run
 ___
 
 ### `remove.yml`:
-Playbook to remove installed packages and configurations.
+Playbook to remove installed packages and configurations (both `git.yml` & `post_git.yml`).
