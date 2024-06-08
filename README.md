@@ -469,4 +469,4 @@ The `install.yml` file is a part of the Ansible setup and is responsible for run
 ___
 
 ### `remove.yml`:
-Playbook to remove installed packages and configurations (both `git.yml` & `post_git.yml`).
+Playbook to remove installed packages and configurations (both `git.yml` & `post_git.yml`) by importing `remove_all.yml` from the repository `.dotfiles`.
