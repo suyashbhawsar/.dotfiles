@@ -48,7 +48,7 @@ ansible-vault encrypt your_text_file
 
 ### **Indent the Encrypted Key (two spaces)**:
 
-Tip: Open the file in **VS Code** press: _`Ctrl + a`_, then _`tab`_ and _`Ctrl + s`_.
+**Tip**: Open the file in **VS Code** press: _`Ctrl + a`_, then _`tab`_ and _`Ctrl + s`_.
 
 ![encrypted_and_indented_public_key](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypted_and_indented_public_key.png)
 
