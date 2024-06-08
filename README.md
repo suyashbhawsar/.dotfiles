@@ -4,6 +4,7 @@
     - [Generate SSH Keys](#generate-ssh-keys)
     - [Check if the Key files are created](#check-if-the-key-files-are-created)
     - [Encrypt the key using Ansible Vault](#encrypt-the-key-using-ansible-vault)
+    - [Check if the Key is Encrypted](#check-if-the-key-is-encrypted)
     - [Indent the Encrypted Key](#indent-the-encrypted-key-two-spaces)
     - [Save the value in `credentials.yml`](#save-the-value-in-credentialsyml)
 3. [Execution](#execution)
@@ -50,6 +51,14 @@ ansible-vault encrypt your_text_file
 ![encrypt_the_public_key_using_ansible_vault](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypt_the_public_key_using_ansible_vault.png)
 
 ![encrypt_the_private_key_using_ansible_vault](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypt_the_private_key_using_ansible_vault.png)
+
+### **Check if the Key is Encrypted:**
+
+```bash
+cat your_text_file
+```
+
+![encrypted_public_key](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypted_public_key.png)
 
 ### **Indent the Encrypted Key (two spaces):**
 
