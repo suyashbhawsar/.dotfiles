@@ -30,7 +30,7 @@
 ssh-keygen -t rsa -b 4096
 ```
 
-![generate_ssh_keys](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/generate_ssh_keys.png)
+![generate_ssh_keys](images/generate_ssh_keys.png)
 
 ### **Check if the Key files are created:**
 
@@ -38,7 +38,7 @@ ssh-keygen -t rsa -b 4096
 ls
 ```
 
-![list_the_keys](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/list_the_keys.png)
+![list_the_keys](images/list_the_keys.png)
 
 ### **Encrypt the key using Ansible Vault:**
 
@@ -48,9 +48,9 @@ Store a single key in a file `your_text_file` & encrypt like this for all the 
 ansible-vault encrypt your_text_file
 ```
 
-![encrypt_the_public_key_using_ansible_vault](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypt_the_public_key_using_ansible_vault.png)
+![encrypt_the_public_key_using_ansible_vault](images/encrypt_the_public_key_using_ansible_vault.png)
 
-![encrypt_the_private_key_using_ansible_vault](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypt_the_private_key_using_ansible_vault.png)
+![encrypt_the_private_key_using_ansible_vault](images/encrypt_the_private_key_using_ansible_vault.png)
 
 ### **Check if the Key is Encrypted:**
 
@@ -58,20 +58,20 @@ ansible-vault encrypt your_text_file
 cat your_text_file
 ```
 
-![encrypted_public_key](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypted_public_key.png)
+![encrypted_public_key](images/encrypted_public_key.png)
 
 ### **Indent the Encrypted Key (two spaces):**
 
 **Tip**: Open the file in **VS Code** press: _`Ctrl + a`_, then _`tab`_ and _`Ctrl + s`_.
 
-![encrypted_and_indented_public_key](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypted_and_indented_public_key.png)
+![encrypted_and_indented_public_key](images/encrypted_and_indented_public_key.png)
 
 
 ## **Save the value in `credentials.yml`:**
 
 Store the encrypted & indented value in `credentials.yml` at the appropriate place while checking `personal_git.yml` or `work_git.yml` to ensure that the variable name is correct.
 
-![store_it_in_credentials.yml](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/store_it_in_credentials.yml.png)
+![store_it_in_credentials.yml](images/store_it_in_credentials.yml.png)
 
 ---
 ___
@@ -469,4 +469,4 @@ The `install.yml` file is a part of the Ansible setup and is responsible for run
 ___
 
 ### `remove.yml`:
-Playbook to remove installed packages and configurations (both `git.yml` & `post_git.yml`) by importing `remove_all.yml` from the repository `.dotfiles`.
+Playbook to remove installed packages and configurations (both `git.yml` & `post_git.yml`) by importing `remove_all.yml` from the `.dotfiles` repository.
