@@ -20,17 +20,30 @@
 
 ### **Generate SSH Keys**:
 
+![generate_ssh_keys](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/generate_ssh_keys.png)
 
+### **Check if the Key files are created**:
 
-![execution](https://github.com/msanchariii/dotfiles/assets/113378204/5163ad49-277b-49c8-abda-7bb8b3d650c7)
-     
-### **Encrypting Keys**
+![list_the_keys](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/list_the_keys.png)
+
+### **Encrypt the key using Ansible Vault**:
 
 Store a single key in a file `your_text_file` & encrypt like this for all the keys
 
-```
+```bash
 ansible-vault encrypt your_text_file
 ```
+
+![encrypt_the_public_key_using_ansible_vault](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypt_the_public_key_using_ansible_vault.png)
+
+![encrypt_the_private_key_using_ansible_vault](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypt_the_private_key_using_ansible_vault.png)
+
+### **Indent the Encrypted Key (two spaces)**:
+
+![encrypted_and_indented_public_key](https://github.com/suyashbhawsar/.dotfiles/blob/main/images/encrypted_and_indented_public_key.png)
+
+
+
 
 Create a variable for the encrypted or plain text key and store it in `credentials.yml`.
     
@@ -40,7 +53,7 @@ Create a variable for the encrypted or plain text key and store it in `credenti
 
 **Install Ansible & Homebrew:**
 
-```
+```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/suyashbhawsar/dotfiles/main/macOS-setup.sh)"
 ```
 
@@ -48,25 +61,25 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/suyashbhawsar/dotfiles/m
 
 **Set up git:**
 
-```
+```bash
 ansible-pull -U https://github.com/suyashbhawsar/dotfiles --vault-id @prompt --tags mac-minimal,mac-full git.yml
 ```
 
 **Install 'Minimal' Packages & Configurations:**
 
-```
+```bash
 ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags mac-minimal install.yml
 ```
 
 **Install 'Full' Packages & Configurations:**
 
-```
+```bash
 ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags mac-full install.yml
 ```
 
 **Remove Packages & Configurations:**
 
-```
+```bash
 ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags mac remove.yml
 ```
 
@@ -76,31 +89,31 @@ ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags mac remove.yml
 
 **Clone the repo & build the docker image**
 
-```
+```bash
 cd ~/ && rm -rf dotfiles && git clone https://github.com/suyashbhawsar/dotfiles.git && docker stop $(docker ps -a | grep "debian-ansible" | sed 's/\|/ /'|awk '{print $1}') | xargs docker rm && docker rmi debian-ansible && docker build -t debian-ansible .
 ```
 
 **Start a container from the docker image**
 
-```
+```bash
 docker run -it --rm debian-ansible /bin/bash
 ```
 
 **Set up git:**
 
-```
+```bash
 ansible-pull -U https://github.com/suyashbhawsar/dotfiles --vault-id @prompt --tags linux git.yml
 ```
 
 **Install Packages & Configurations:**
 
-```
+```bash
 ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags linux install.yml
 ```
 
 **Remove Packages & Configurations:**
 
-```
+```bash
 ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags linux remove.yml
 ```
 
