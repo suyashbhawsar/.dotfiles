@@ -90,6 +90,8 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/suyashbhawsar/dotfiles/m
 
 **Set up git:**
 
+Note: You'll be prompted to enter the password to decrypt the encrypted values you've created using Ansible vault.
+
 ```bash
 ansible-pull -U https://github.com/suyashbhawsar/dotfiles --vault-id @prompt --tags mac-minimal,mac-full git.yml
 ```
@@ -138,6 +140,8 @@ docker run -it --rm debian-ansible /bin/bash
 ```
 
 **Set up git:**
+
+Note: You'll be prompted to enter the password to decrypt the encrypted values you've created using Ansible vault.
 
 ```bash
 ansible-pull -U https://github.com/suyashbhawsar/dotfiles --vault-id @prompt --tags linux git.yml
