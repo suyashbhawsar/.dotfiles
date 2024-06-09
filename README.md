@@ -1,6 +1,6 @@
 # **dotfiles**
 
-1. [Setup](#setup)
+1. [Setup `credentials.yml`](#setup-credentialsyml)
     - [Generate SSH Keys](#generate-ssh-keys)
     - [Check if the Key files are created](#check-if-the-key-files-are-created)
     - [Encrypt the key using Ansible Vault](#encrypt-the-key-using-ansible-vault)
@@ -22,7 +22,7 @@
 
 ---
 
-## **Setup:**
+## **Setup `credentials.yml`:**
 
 ### **Generate SSH Keys:**
 
@@ -119,7 +119,16 @@ ansible-pull -U https://github.com/suyashbhawsar/dotfiles --tags mac remove.yml
 **Clone the repo & build the docker image**
 
 ```bash
-cd ~/ && rm -rf dotfiles && git clone https://github.com/suyashbhawsar/dotfiles.git && docker stop $(docker ps -a | grep "debian-ansible" | sed 's/\|/ /'|awk '{print $1}') | xargs docker rm && docker rmi debian-ansible && docker build -t debian-ansible .
+cd ~/ && rm -rf dotfiles && git clone https://github.com/suyashbhawsar/dotfiles.git && (if docker ps -a --format '{{.Names}}' | grep -q "^debian-ansible$"; then \
+    docker stop debian-ansible; \
+fi && \
+if docker ps -a --format '{{.Names}}' | grep -q "^debian-ansible$"; then \
+    docker rm debian-ansible; \
+fi && \
+if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "^debian-ansible:"; then \
+    docker rmi debian-ansible; \
+fi && \
+docker build -t debian-ansible ~/dotfiles)
 ```
 
 **Start a container from the docker image**
