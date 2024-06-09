@@ -2,9 +2,10 @@
 
 1. [Setup `credentials.yml`](#setup-credentialsyml)
     - [Generate SSH Keys](#generate-ssh-keys)
-    - [Check if the Key files are created](#check-if-the-key-files-are-created)
-    - [Encrypt the key using Ansible Vault](#encrypt-the-key-using-ansible-vault)
-    - [Check if the Key is Encrypted](#check-if-the-key-is-encrypted)
+    - [Verify SSH Key Creation](#verify-ssh-key-creation)
+    - [Copy Public Key to GitHub](#copy-public-key-to-github)
+    - [Encrypt the key using Ansible Vault](#encrypt-the-ssh-key-using-ansible-vault)
+    - [Verify Key Encryption](#verify-key-encryption)
     - [Indent the Encrypted Key](#indent-the-encrypted-key-two-spaces)
     - [Save the value in `credentials.yml`](#save-the-value-in-credentialsyml)
 3. [Execution](#execution)
@@ -32,7 +33,9 @@ ssh-keygen -t rsa -b 4096
 
 ![generate_ssh_keys](images/generate_ssh_keys.png)
 
-### **Check if the Key files are created:**
+### **Verify SSH Key Creation:**
+
+- List the files in your current directory to ensure the keys were created:
 
 ```bash
 ls
@@ -40,9 +43,26 @@ ls
 
 ![list_the_keys](images/list_the_keys.png)
 
-### **Encrypt the key using Ansible Vault:**
+### **Copy Public Key to GitHub:**
 
-Store a single key in a file `your_text_file` & encrypt like this for all the keys
+1. Display your public key with the following command:
+
+```bash
+cat your_text_file
+```
+
+2. Copy the entire output of this command.
+3. Open your web browser and go to [GitHub SSH and GPG keys settings](https://github.com/settings/keys).
+4. Click New SSH key.
+5. Paste your key into the "Key" field.
+6. Add a descriptive title, such as "My Laptop Key".
+7. Click Add SSH key.
+
+### **Encrypt the SSH Key Using Ansible Vault:**
+
+- Store a single key in a file `your_text_file` & encrypt like this for all the keys. For ssh keys, use those files as it is.
+
+- Similarly, you can store any kind of text in a file & encrypt it
 
 ```bash
 ansible-vault encrypt your_text_file
@@ -52,7 +72,9 @@ ansible-vault encrypt your_text_file
 
 ![encrypt_the_private_key_using_ansible_vault](images/encrypt_the_private_key_using_ansible_vault.png)
 
-### **Check if the Key is Encrypted:**
+### **Verify Key Encryption:**
+
+- Check the contents of the encrypted file:
 
 ```bash
 cat your_text_file
@@ -62,14 +84,23 @@ cat your_text_file
 
 ### **Indent the Encrypted Key (two spaces):**
 
-**Tip**: Open the file in **VS Code** press: _`Ctrl + a`_, then _`tab`_ and _`Ctrl + s`_.
+1. Open the encrypted file in a text editor (e.g., VS Code).
+
+2. Select all text with Ctrl + a.
+
+3. Indent the text by pressing Tab.
+
+4. Save the file with Ctrl + s.
 
 ![encrypted_and_indented_public_key](images/encrypted_and_indented_public_key.png)
 
-
 ## **Save the value in `credentials.yml`:**
 
-Store the encrypted & indented value in `credentials.yml` at the appropriate place while checking `personal_git.yml` or `work_git.yml` to ensure that the variable name is correct.
+1. Open credentials.yml in a text editor.
+
+2. Copy the encrypted and indented key from your file.
+
+3. Paste it into the appropriate place in credentials.yml while checking `personal_git.yml` or `work_git.yml`, to ensure that the variable name is correct.
 
 ![store_it_in_credentials.yml](images/store_it_in_credentials.yml.png)
 
